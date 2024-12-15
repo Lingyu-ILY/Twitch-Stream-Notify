@@ -82,14 +82,14 @@ class TwitchMonitor {
 
         // Ready!
         console.log('[Twitch監控]', `配置頻道的串流狀態輪詢:`, this.channelNames.join(', '),
-          `(${checkIntervalMs}ms interval)`);
+          `(${checkIntervalMs}毫秒間隔)`);
     }
 
     static stop() {
         if (this.pollingInterval) {
             clearInterval(this.pollingInterval);
             this.pollingInterval = null;
-            console.log('[Twitch監控]', 'Polling stopped.');
+            console.log('[Twitch監控]', '查詢停止.');
         }
     }
 
@@ -110,7 +110,7 @@ class TwitchMonitor {
               .then(() => {
                   if (this._pendingUserRefresh) {
                       this._pendingUserRefresh = false;
-                      this.refresh('Got Twitch users, need to get streams');
+                      this.refresh('取得 Twitch 使用者, 需要取得直播');
                   }
               })
         }
