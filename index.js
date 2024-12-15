@@ -491,6 +491,7 @@ for (const discordChannel of targetChannels) {
             let existingMsgData = messageHistory[liveMsgDiscrim];
             let existingMsgId = existingMsgData && !existingMsgData.offline ? existingMsgData.id : null; // Only use the message if it's still live
 
+            let defaultmentions = config.default_mention;
             let mentionMode = null;
             if (isLive) {  // Only include mention if the stream is live
                 const streamerName = streamData.user_name.toLowerCase();
@@ -526,9 +527,32 @@ for (const discordChannel of targetChannels) {
                         }
                     }
                 }
+
+                if (defaultmentions) {
+                    defaultmentions = defaultmentions.toLowerCase();
+
+                    if (defaultmentions === "none") {
+                        defaultmentions = ""; 
+                    } else if (defaultmentions === "everyone" || defaultmentions === "here") {
+                        defaultmentions = `@${defaultmentions}`;
+                    } else {
+                        let roleData = discordChannel.guild.roles.cache.find(role => 
+                            role.name.toLowerCase() === defaultmentions
+                        );
+
+                        if (roleData) {
+                            defaultmentions = `<@&${roleData.id}>`;
+                        } else {
+                            console.log('[Discord]', 
+                                `無法提及: ${defaultmentions}, (不存在於伺服器 ${discordChannel.guild.name})`
+                            );
+                            defaultmentions = ""; 
+                        }
+                    }
+                }
             }
 
-            let msgToSend = mentionMode ? `${msgFormatted} ${mentionMode}` : `${msgFormatted} @${config.default_mention}`;
+            let msgToSend = mentionMode ? `${msgFormatted} ${mentionMode}` : `${msgFormatted} ${defaultmentions}`;
 
             if (existingMsgId) {
                 // Update existing message
