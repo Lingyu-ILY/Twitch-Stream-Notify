@@ -129,15 +129,15 @@ client.once('ready', async () => {
 
     // Register slash commands
     try {
-        console.log('Started refreshing application (/) commands.');
+        console.log('開始更新應用 (/) 指令.');
 
         await rest.put(Routes.applicationCommands(client.user.id), {
             body: commands,
         });
 
-        console.log('Successfully reloaded application (/) commands.');
+        console.log('應用 (/) 指令更新完成.');
     } catch (error) {
-        console.error('Error registering commands:', error);
+        console.error('註冊指令錯誤:', error);
     }
 
 
