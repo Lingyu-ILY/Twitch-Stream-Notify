@@ -60,7 +60,7 @@ class TwitchMonitor {
         // Load channel names from config
         this.channelNames = config.twitch_channels.split(',').map(channelName => channelName.trim().toLowerCase()).filter(Boolean);
         if (!this.channelNames.length) {
-            console.warn('[TwitchMonitor]', 'No channels configured');
+            console.warn('[Twitch監控]', '沒有已設定的頻道');
             return;
         }
 
@@ -72,16 +72,16 @@ class TwitchMonitor {
         }
         
         this.pollingInterval = setInterval(() => {
-            this.refresh("Periodic refresh");
+            this.refresh("定期刷新");
         }, checkIntervalMs + 1000);
 
         // Immediate refresh after startup
         setTimeout(() => {
-            this.refresh("Initial refresh after start-up");
+            this.refresh("啟動後初始刷新");
         }, 1000);
 
         // Ready!
-        console.log('[TwitchMonitor]', `Configured stream status polling for channels:`, this.channelNames.join(', '),
+        console.log('[Twitch監控]', `配置頻道的串流狀態輪詢:`, this.channelNames.join(', '),
           `(${checkIntervalMs}ms interval)`);
     }
 
@@ -89,23 +89,23 @@ class TwitchMonitor {
         if (this.pollingInterval) {
             clearInterval(this.pollingInterval);
             this.pollingInterval = null;
-            console.log('[TwitchMonitor]', 'Polling stopped.');
+            console.log('[Twitch監控]', 'Polling stopped.');
         }
     }
 
     static refresh(reason) {
         const now = moment();
-        console.log('[Twitch]', ' ▪ ▪ ▪ ▪ ▪ ', `Refreshing now (${reason ? reason : "No reason"})`, ' ▪ ▪ ▪ ▪ ▪ ');
+        console.log('[Twitch]', ' ▪ ▪ ▪ ▪ ▪ ', `正在刷新 (${reason ? reason : "沒有原因"})`, ' ▪ ▪ ▪ ▪ ▪ ');
 
         // Refresh all users periodically
-        if (this._lastUserRefresh === null || now.diff(moment(this._lastUserRefresh), 'minutes') >= 10) {
+        if (this._lastUserRefresh === null || now.diff(moment(this._lastUserRefresh), '分鐘') >= 10) {
             this._pendingUserRefresh = true;
             TwitchApi.fetchUsers(this.channelNames)
               .then((users) => {
                   this.handleUserList(users);
               })
               .catch((err) => {
-                  console.warn('[TwitchMonitor]', 'Error in users refresh:', err);
+                  console.warn('[Twitch監控]', '使用者刷新錯誤:', err);
               })
               .then(() => {
                   if (this._pendingUserRefresh) {
@@ -122,7 +122,7 @@ class TwitchMonitor {
                   this.handleGameList(games);
               })
               .catch((err) => {
-                  console.warn('[TwitchMonitor]', 'Error in games refresh:', err);
+                  console.warn('[Twitch監控]', '遊戲刷新錯誤:', err);
               })
               .then(() => {
                   if (this._pendingGameRefresh) {
@@ -138,7 +138,7 @@ class TwitchMonitor {
                   this.handleStreamList(channels);
               })
               .catch((err) => {
-                  console.warn('[TwitchMonitor]', 'Error in streams refresh:', err);
+                  console.warn('[Twitch監控]', '直播刷新錯誤:', err);
               });
         }
     }
@@ -154,7 +154,7 @@ class TwitchMonitor {
         });
 
         if (namesSeen.length) {
-            console.debug('[TwitchMonitor]', 'Updated user info:', namesSeen.join(', '));
+            console.debug('[Twitch監控]', '更新了用戶資訊:', namesSeen.join(', '));
         }
 
         this._lastUserRefresh = moment();
@@ -176,7 +176,7 @@ class TwitchMonitor {
         });
 
         if (gotGameNames.length) {
-            console.debug('[TwitchMonitor]', 'Updated game info:', gotGameNames.join(', '));
+            console.debug('[Twitch監控]', '更新了遊戲資訊:', gotGameNames.join(', '));
         }
 
         this._lastGameRefresh = moment();
@@ -218,7 +218,7 @@ class TwitchMonitor {
 
             if (this.activeStreams.indexOf(_chanName) === -1) {
                 // Stream was not in the list before
-                console.log('[TwitchMonitor]', 'Stream channel has gone online:', _chanName);
+                console.log('[Twitch監控]', '直播頻道已上線:', _chanName);
                 anyChanges = true;
             }
 
@@ -233,7 +233,7 @@ class TwitchMonitor {
 
             if (nextOnlineList.indexOf(_chanName) === -1) {
                 // Stream was in the list before, but no longer
-                console.log('[TwitchMonitor]', 'Stream channel has gone offline:', _chanName);
+                console.log('[Twitch監控]', '直播頻道已下線:', _chanName);
                 this.streamData[_chanName].type = "detected_offline";
                 this.handleChannelOffline(this.streamData[_chanName]);
                 anyChanges = true;
@@ -244,7 +244,7 @@ class TwitchMonitor {
             // Notify OK, update list
             this.activeStreams = nextOnlineList;
         } else {
-            console.log('[TwitchMonitor]', 'Could not notify channel, will try again next update.');
+            console.log('[Twitch監控]', '無法傳送通知至頻道, 將在下次更新時重試.');
         }
 
         if (!this._watchingGameIds.hasEqualValues(nextGameIdList)) {

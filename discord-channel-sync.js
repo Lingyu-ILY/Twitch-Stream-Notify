@@ -19,8 +19,8 @@ class DiscordChannelSync {
                 const channels = await fullGuild.channels.fetch();
 
                 if (verbose) {
-                    console.log('[Discord]', `Fetching channels for guild: ${fullGuild.name}`);
-                    console.log('[Discord]', `Channels available: ${channels.map(c => c.id).join(', ')}`);
+                    console.log('[Discord]', `正在獲取公會的頻道: ${fullGuild.name}`);
+                    console.log('[Discord]', `可用頻道: ${channels.map(c => c.id).join(', ')}`);
                 }
 
                 for (const channelId of channelIds) {
@@ -35,13 +35,13 @@ class DiscordChannelSync {
                             const permissions = targetChannel.permissionsFor(fullGuild.members.me);
 
                             if (verbose) {
-                                console.log('[Discord]', ' --> ', `Member of server ${fullGuild.name}, target channel is #${targetChannel.name}`);
-                                console.log('[Discord]', 'Permissions:', permissions.toArray());
+                                console.log('[Discord]', ' --> ', `伺服器成員 ${fullGuild.name}, 目標頻道是 #${targetChannel.name}`);
+                                console.log('[Discord]', '權限:', permissions.toArray());
                             }
 
                             if (!permissions.has(PermissionsBitField.Flags.SendMessages)) {
                                 if (verbose) {
-                                    console.warn('[Discord]', 'Permission problem /!\\', `I do not have SEND_MESSAGES permission on channel #${targetChannel.name} on ${fullGuild.name}: announcement sends will fail.`);
+                                    console.warn('[Discord]', '權限問題 /!\\', `我沒有頻道上的 SEND_MESSAGES 權限 #${targetChannel.name} 於 ${fullGuild.name}: 公告發送將會失敗.`);
                                 }
                             } else {
                                 nextTargetChannels.push(targetChannel);
@@ -52,10 +52,10 @@ class DiscordChannelSync {
             }
 
             if (verbose) {
-                console.log('[Discord]', `Discovered ${nextTargetChannels.length} channels to announce to.`);
+                console.log('[Discord]', `發現 ${nextTargetChannels.length} 個公告頻道.`);
             }
         } catch (error) {
-            console.error('[Discord]', 'Error fetching channels:', error);
+            console.error('[Discord]', '取得頻道時發生錯誤:', error);
         }
 
         return nextTargetChannels;

@@ -396,19 +396,19 @@ class StreamActivity {
 
     static setChannelOnline(stream) {
         this.onlineChannels[stream.user_name] = stream;
-        console.log('[StreamActivity]', `頻道上線: ${stream.user_name}`);
+        console.log('[直播動態]', `頻道上線: ${stream.user_name}`);
         this.updateActivity();
     }
 
     static setChannelOffline(stream) {
         delete this.onlineChannels[stream.user_name];
-        console.log('[StreamActivity]', `頻道離線: ${stream.user_name}`);
+        console.log('[直播動態]', `頻道離線: ${stream.user_name}`);
         this.updateActivity();
     }
 
     static clearAllChannels() {
         this.onlineChannels = {};
-        console.log('[StreamActivity]', 'Cleared all channels');
+        console.log('[直播動態]', '清除所有頻道');
         this.updateActivity();
     }
 
@@ -429,9 +429,9 @@ class StreamActivity {
                 type: 1, // 1 is 'STREAMING'
                 url: `https://twitch.tv/${streamInfo.user_name.toLowerCase()}`
             });
-            console.log('[StreamActivity]', `Update current activity: streaming ${streamInfo.user_name}.`);
+            console.log('[直播動態]', `更新目前動態: 直播中 ${streamInfo.user_name}.`);
         } else {
-            console.log('[StreamActivity]', 'Cleared current activity.');
+            console.log('[直播動態]', '清除目前動態.');
             this.discordClient.user.setActivity(null);
         }
     }
@@ -459,7 +459,7 @@ TwitchMonitor.onChannelLiveUpdate(async (streamData) => {
     const now = Date.now();
     const lastNotification = debounce.get(streamerName);
     if (lastNotification && (now - lastNotification) < 60000) { // 1 minute debounce
-        console.log(`[Discord] Debouncing notification for ${streamerName}`);
+        console.log(`[Discord] 防震動通知 ${streamerName}`);
         return false;
     }
     debounce.set(streamerName, now);
@@ -642,14 +642,14 @@ for (const discordChannel of targetChannels) {
                         if (index > -1) {
                             targetChannels.splice(index, 1);
                             console.log('[Discord]', 
-                                `移除頻道 #${discordChannel.name} due to missing permissions`
+                                `移除頻道 #${discordChannel.name} 由於缺少權限`
                             );
                         }
                     }
                 }
             }
         } catch (e) {
-            console.warn('[Discord]', 'Message handling problem:', e);
+            console.warn('[Discord]', '訊息處理發生問題:', e);
         }
     }
 }
