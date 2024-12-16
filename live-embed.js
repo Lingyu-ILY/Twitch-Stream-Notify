@@ -11,7 +11,7 @@ class LiveEmbed {
     
     msgEmbed.setColor(isLive ? "#9146ff" : "#808080");
     msgEmbed.setURL(`https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}`);
-    msgEmbed.setAuthor('開台通知', `${streamData.thumbnail_url}`);
+    msgEmbed.setAuthor('開台通知', `${streamData.thumbnail_url}`, `https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}`);
     
     // Thumbnail
     let thumbUrl = streamData.profile_image_url;
