@@ -36,7 +36,7 @@ class LiveEmbed {
       msgEmbed.addFields({ name: "正在遊玩", value: streamData.game.name, inline: false });
     }
     
-    if (isLive) {
+    if (true) { //remove isLive make stats always show
       msgEmbed.addFields({ name: "更新", value: isLive ? `:green_square: 正在追蹤` : ':black_large_square: 停止追蹤', inline: false });
       // Add status
       msgEmbed.addFields({ name: "狀態", value: isLive ? `直播有 ${streamData.viewer_count} 名觀眾` : '直播已結束', inline: true });
