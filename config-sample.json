@@ -1,4 +1,7 @@
 {
+  "default_mention": "",
+  "live_text": "",
+  "live_end_text": "",
   "twitch_channels": "",
   "discord_announce_channel": [],
   "discord_mentions": {},

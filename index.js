@@ -23,7 +23,7 @@ const MiniDb = require('./minidb');
 const debounce = new Map();
 
 
-const commands = [
+/*const commands = [
     {
         name: 'setup',
         description: '設定你的機器人',
@@ -121,24 +121,24 @@ const commands = [
             }
         ],
     },
-];
+];*/
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN || config.discord_bot_token);
 
 client.once('ready', async () => {
     console.log(`[Discord] 應用準備完成; 登入為 ${client.user.tag}.`);
 
-    // Register slash commands
-    try {
-        console.log('開始更新應用 (/) 指令.');
-
-        await rest.put(Routes.applicationCommands(client.user.id), {
-            body: commands,
-        });
-
-        console.log('應用 (/) 指令更新完成.');
-    } catch (error) {
-        console.error('註冊指令錯誤:', error);
-    }
+    // Register slash commands (Disable this feature)
+//    try {
+//        console.log('開始更新應用 (/) 指令.');
+//
+//        await rest.put(Routes.applicationCommands(client.user.id), {
+//            body: commands,
+//        });
+//
+//        console.log('應用 (/) 指令更新完成.');
+//    } catch (error) {
+//        console.error('註冊指令錯誤:', error);
+//    }
 
 
     await syncServerList(true);
@@ -148,7 +148,7 @@ client.once('ready', async () => {
     TwitchMonitor.start();
 });
 
-client.on('interactionCreate', async (interaction) => {
+/*client.on('interactionCreate', async (interaction) => {
     if (!interaction.isCommand()) return;
 
     const { commandName, options } = interaction;
@@ -281,7 +281,7 @@ client.on('interactionCreate', async (interaction) => {
             .setColor('#0099ff')
             .setTitle('幫助 - 設定指令')
             .addFields(
-                { name: '**/setup**', value: '設定應用.' },
+                { name: '**setup**', value: '設定應用.' },
                 { name: '**twitch_channels**', value: 'Comma-separated list of Twitch channels to monitor. You can add as little or as many as you want. Syntax: `channel1,channel2`' },
                 { name: '**discord_announce_channel**', value: 'The name of the Discord channel where announcements will be made (e.g., `announcements`).' },
                 { name: '**discord_mentions**', value: 'JSON string for Discord mentions, used for notifying users when a stream goes live.' },
@@ -327,6 +327,7 @@ client.on('interactionCreate', async (interaction) => {
         }
     }
 });
+*/
 // --- Startup ---------------------------------------------------------------------------------------------------------
 console.log('Twitch Notify 應用已啟動.');
 
@@ -352,7 +353,7 @@ let syncServerList = async (logMembership) => {
 client.once('ready', async () => {
     console.log(`[Discord] 應用準備完成; 登入為 ${client.user.tag}.`);
 
-    try {
+/*    try {
         console.log('開始更新應用 (/) 指令.');
 
         await rest.put(Routes.applicationCommands(client.user.id), {
@@ -363,7 +364,7 @@ client.once('ready', async () => {
     } catch (error) {
         console.error('註冊指令錯誤:', error);
     }
-
+*/
     // Init list of connected servers, and determine which channels we are announcing to
     await syncServerList(true);
 
@@ -475,8 +476,8 @@ TwitchMonitor.onChannelLiveUpdate(async (streamData) => {
 
     // Generate message
     const msgFormatted = isLive 
-        ? `${streamData.user_name} 正在 Twitch 上直播!`
-        : `${streamData.user_name} 在 Twitch 上直播.`;
+        ? `${config.live_text}`
+        : `${config.live_end_text}`;
     const msgEmbed = LiveEmbed.createForStream(streamData);
 
     // Broadcast to all target channels
@@ -709,7 +710,7 @@ TwitchMonitor.onChannelOffline(async (streamData) => {
 
                 const existingMsg = await discordChannel.messages.fetch(messageHistory[liveMsgDiscrim].id);
                 await existingMsg.edit({
-                    content: `${streamData.user_name} 曾在 Twitch 上直播. ${defaultmentions}`,
+                    content: `${config.live_end_text} ${defaultmentions}`,
                     embeds: [LiveEmbed.createForStream(streamData)] // Update the embed for offline state
                 });
                 messageHistory[liveMsgDiscrim].offline = true;

@@ -9,7 +9,7 @@ class LiveEmbed {
     const allowBoxArt = config.twitch_use_boxart;
     let msgEmbed = new EmbedBuilder();
     
-		const started_time = new Date(StreamData.started_at);
+		const started_time = new Date(streamData.started_at);
     const ended_time = new Date(streamData.ended_at);
 		const startat = started_time.toLocaleString('zh-TW');
     const endat = ended_time.toLocaleString('zh-TW');
