@@ -11,6 +11,7 @@ class LiveEmbed {
     
     msgEmbed.setColor(isLive ? "#9146ff" : "#808080");
     msgEmbed.setURL(`https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}`);
+    msgEmbed.setAuthor({ name: `${streamData.user_name}`, iconURL: `${streamData.profile_image_url}`});
     
     // Thumbnail
     let thumbUrl = streamData.profile_image_url;
