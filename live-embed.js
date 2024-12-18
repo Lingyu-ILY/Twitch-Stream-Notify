@@ -9,8 +9,14 @@ class LiveEmbed {
     const allowBoxArt = config.twitch_use_boxart;
     let msgEmbed = new EmbedBuilder();
     
+		const started_time = new Date(StreamData.started_at);
+    const ended_time = new Date(streamData.ended_at);
+		const startat = started_time.toLocaleString('zh-TW');
+    const endat = ended_time.toLocaleString('zh-TW');
+    
     msgEmbed.setColor(isLive ? "#9146ff" : "#808080");
     msgEmbed.setURL(`https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}`);
+    msgEmbed.setFooter({ text: `ancientmaple • ${startat}`});
     
     // Thumbnail
     let thumbUrl = streamData.profile_image_url;
@@ -42,15 +48,15 @@ class LiveEmbed {
     if (isLive) {
       // Set main image (stream preview, offline well be change to channel background)
       let imageUrl = streamData.thumbnail_url;
-      imageUrl = imageUrl.replace("{width}", "1280");
-      imageUrl = imageUrl.replace("{height}", "720");
+      imageUrl = imageUrl.replace("{width}", "400");
+      imageUrl = imageUrl.replace("{height}", "225");
       let thumbnailBuster = (Date.now() / 1000).toFixed(0);
       imageUrl += `?t=${thumbnailBuster}`;
       msgEmbed.setImage(imageUrl);
     } else {
       let imageUrl = streamData.offline_image_url;
-      imageUrl = imageUrl.replace("{width}", "1280");
-      imageUrl = imageUrl.replace("{height}", "720");
+      imageUrl = imageUrl.replace("{width}", "400");
+      imageUrl = imageUrl.replace("{height}", "225");
       let thumbnailBuster = (Date.now() / 1000).toFixed(0);
       imageUrl += `?t=${thumbnailBuster}`;
       msgEmbed.setImage(imageUrl);
@@ -87,6 +93,12 @@ class LiveEmbed {
         }),
         inline: true
       });
+    }
+
+    if (!isLive) {
+      msgEmbed.addFields({ name: "開始時間", value: `${startat}`, inline: true });
+      msgEmbed.addFields({ name: "結束時間", value: `${endat}`, inline: true });
+
     }
     
     return msgEmbed;
