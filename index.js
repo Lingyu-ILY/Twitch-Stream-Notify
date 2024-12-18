@@ -476,8 +476,8 @@ TwitchMonitor.onChannelLiveUpdate(async (streamData) => {
 
     // Generate message
     const msgFormatted = isLive 
-        ? `${config.live_text}`
-        : `${config.live_end_text}`;
+        ? `${streamData.user_name} ${config.live_text}`
+        : `${streamData.user_name} ${config.live_end_text}`;
     const msgEmbed = LiveEmbed.createForStream(streamData);
 
     // Broadcast to all target channels
@@ -710,7 +710,7 @@ TwitchMonitor.onChannelOffline(async (streamData) => {
 
                 const existingMsg = await discordChannel.messages.fetch(messageHistory[liveMsgDiscrim].id);
                 await existingMsg.edit({
-                    content: `${config.live_end_text} ${defaultmentions}`,
+                    content: `${streamData.user_name} ${config.live_end_text} ${defaultmentions}`,
                     embeds: [LiveEmbed.createForStream(streamData)] // Update the embed for offline state
                 });
                 messageHistory[liveMsgDiscrim].offline = true;
