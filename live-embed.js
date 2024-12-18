@@ -9,9 +9,14 @@ class LiveEmbed {
     const allowBoxArt = config.twitch_use_boxart;
     let msgEmbed = new EmbedBuilder();
     
+		const started_time = new Date(streamData.started_at);
+    const ended_time = new Date(streamData.ended_at);
+		const startat = started_time.toLocaleString('zh-TW');
+    const endat = ended_time.toLocaleString('zh-TW');
+    
     msgEmbed.setColor(isLive ? "#9146ff" : "#808080");
     msgEmbed.setURL(`https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}`);
-    msgEmbed.setFooter({ text: `ancientmaple • ${streamData.started_at}`});
+    msgEmbed.setFooter({ text: `ancientmaple • ${startat}`});
     
     // Thumbnail
     let thumbUrl = streamData.profile_image_url;
@@ -91,8 +96,8 @@ class LiveEmbed {
     }
 
     if (!isLive) {
-      msgEmbed.addFields({ name: "開始時間", value: streamData.started_at, inline: true });
-      msgEmbed.addFields({ name: "結束時間", value: streamData.ended_at, inline: true });
+      msgEmbed.addFields({ name: "開始時間", value: `${startat}`, inline: true });
+      msgEmbed.addFields({ name: "結束時間", value: `${endat}`, inline: true });
 
     }
     
