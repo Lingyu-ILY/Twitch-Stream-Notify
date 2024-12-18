@@ -25,12 +25,12 @@ class LiveEmbed {
       // Title
       //msgEmbed.setTitle(`:red_circle: **${streamData.user_name} 正在 Twitch 上直播!**`);
       //msgEmbed.addFields({ name: "標題", value: streamData.title, inline: false });
-      msgEmbed.setAuthor({ name: `${streamData.user_name}正在 Twitch 上直播!`, iconURL: `${streamData.profile_image_url}`, url: 'https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}'});
+      msgEmbed.setAuthor({ name: `${streamData.user_name}正在 Twitch 上直播!`, iconURL: `${streamData.profile_image_url}`, url: `https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}`});
     } else {
       //msgEmbed.setTitle(`:white_circle: ${streamData.user_name} 曾在 Twitch 上直播.`);
       //msgEmbed.setDescription('本次直播已結束.');
       //msgEmbed.addFields({ name: "標題", value: streamData.title, inline: true });
-      msgEmbed.setAuthor({ name: `${streamData.user_name}曾在 Twitch 上直播.`, iconURL: `${streamData.profile_image_url}`, url: 'https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}'});
+      msgEmbed.setAuthor({ name: `${streamData.user_name}曾在 Twitch 上直播.`, iconURL: `${streamData.profile_image_url}`, url: `https://twitch.tv/${(streamData.login || streamData.user_name).toLowerCase()}`});
     }
     
     // Add game
