@@ -10,7 +10,7 @@ class LiveEmbed {
     let msgEmbed = new EmbedBuilder();
     
 		const started_time = new Date(streamData.started_at);
-    const ended_time = new Date(streamData.ended_at);
+    const ended_time = new Date(Date.now());
 		const startat = started_time.toLocaleString('zh-TW');
     const endat = ended_time.toLocaleString('zh-TW');
     
@@ -61,6 +61,12 @@ class LiveEmbed {
       imageUrl += `?t=${thumbnailBuster}`;
       msgEmbed.setImage(imageUrl);
     }
+
+    if (!isLive) {
+      msgEmbed.addFields({ name: "開始時間", value: `${startat}`, inline: false });
+      msgEmbed.addFields({ name: "結束時間", value: `${endat}`, inline: false });
+
+    }
     
     if (true) { //remove isLive make stats always show
       //msgEmbed.addFields({ name: "更新", value: isLive ? `:red_circle: 正在追蹤` : ':white_circle: 停止追蹤', inline: false });
@@ -95,12 +101,6 @@ class LiveEmbed {
       });
     }
 
-    if (!isLive) {
-      msgEmbed.addFields({ name: "開始時間", value: `${startat}`, inline: true });
-      msgEmbed.addFields({ name: "結束時間", value: `${endat}`, inline: true });
-
-    }
-    
     return msgEmbed;
   }
 }

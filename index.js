@@ -685,25 +685,25 @@ TwitchMonitor.onChannelOffline(async (streamData) => {
             try {
                 let defaultmentions = config.default_mention;
 // Add to offline keep mention
-                if (mentionMode) {
-                    mentionMode = mentionMode.toLowerCase();
+                if (defaultmentions) {
+                    defaultmentions = defaultmentions.toLowerCase();
             
-                    if (mentionMode === "none") {
-                        mentionMode = ""; 
-                    } else if (mentionMode === "everyone" || mentionMode === "here") {
-                        mentionMode = `@${mentionMode}`;
+                    if (defaultmentions === "none") {
+                        defaultmentions = ""; 
+                    } else if (defaultmentions === "everyone" || defaultmentions === "here") {
+                        defaultmentions = `@${defaultmentions}`;
                     } else {
                         let roleData = discordChannel.guild.roles.cache.find(role => 
-                            role.name.toLowerCase() === mentionMode
+                            role.name.toLowerCase() === defaultmentions
                         );
             
                         if (roleData) {
-                            mentionMode = `<@&${roleData.id}>`;
+                            defaultmentions = `<@&${roleData.id}>`;
                         } else {
                             console.log('[Discord]', 
-                                `無法提及: ${mentionMode}, (不存在於伺服器 ${discordChannel.guild.name})`
+                                `無法提及: ${defaultmentions}, (不存在於伺服器 ${discordChannel.guild.name})`
                             );
-                            mentionMode = ""; 
+                            defaultmentions = ""; 
                         }
                     }
                 }
